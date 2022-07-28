@@ -60,8 +60,17 @@ Route::get('/listings/{listing}', [ListingController::class, 'show']);
 //SHOW REGISTER/CREATE FORM:
 Route::get('/register', [UserController::class, 'create']);
 
-//CREATE NEW USER
+//CREATE NEW USER:
 Route::post('/users', [UserController::class, 'store']);
+
+//LOG USER OUT:
+Route::post('/logout', [UserController::class, 'logout']);
+
+//SHOW LOGIN FORM:
+Route::get('/login', [UserController::class, 'login']);
+
+//LOG IN USER:
+Route::post('/users/authenticate', [UserController::class, 'authenticate']);
 
 //NOTES ON ROUTING:
 
