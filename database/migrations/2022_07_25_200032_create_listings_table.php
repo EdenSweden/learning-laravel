@@ -15,6 +15,8 @@ class CreateListingsTable extends Migration
     {
         Schema::create('listings', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            // cascade: if user is deleted, listings will also be deleted automatically.
             $table->string('title');
             //We aren't storing the actual image in the db, just the file path. So it's a string.
             $table->string('logo')->nullable();

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use App\Models\Listing;
 use Illuminate\Database\Seeder;
 
@@ -15,9 +16,17 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         //creates 5 dummy users for testing. To go back to normal, in the terminal say php artisan migrate:refresh
-         \App\Models\User::factory(5)->create();
+        //  \App\Models\User::factory(5)->create();
 
-        Listing::factory(6)->create();
+        //creates a single user with 6 listings:
+        $user = User::factory()->create([
+            'name' => 'John Doe',
+            'email' => 'john@gmail.com'
+        ]);
+
+        Listing::factory(6)->create([
+            'user_id' => $user->id
+        ]);
 
          //How to create hardcoded dummy listings rather than using factory:
 
