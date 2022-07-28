@@ -53,6 +53,9 @@ Route::put('/listings/{listing}', [ListingController::class, 'update'])->middlew
 //DELETE LISTING:
 Route::delete('/listings/{listing}', [ListingController::class, 'destroy'])->middleware('auth');
 
+// MANAGE LISTINGS:
+Route::get('/listings/manage', [ListingController::class, 'manage'])->middleware('auth');
+
 // GET SINGLE LISTING:
 //This uses Eloquent model binding. Automatic 404 functionality if the id entered in the url doesn't actually exist as a page, etc. 
 //This must be at the bottom because otherwise, other /listings routes won't work
@@ -74,6 +77,7 @@ Route::get('/login', [UserController::class, 'login'])->name('login')->middlewar
 
 //LOG IN USER:
 Route::post('/users/authenticate', [UserController::class, 'authenticate']);
+
 
 //NOTES ON ROUTING:
 

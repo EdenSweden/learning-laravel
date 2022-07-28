@@ -57,6 +57,8 @@ class ListingController extends Controller
             //Afterward, you need to create a link between folders so that the image is publicly accessible. Command is php artisan storage:link.
             //Then url path to logo will be [site || localhost:PORT]/storage/logos/[file-name-here]
         }
+
+        $formFields['user_id'] = auth()->id();
         //TO CREATE SOMETHING IN THE DATABASE, use ModelNameHere::create
         Listing::create($formFields);
 
@@ -74,6 +76,11 @@ class ListingController extends Controller
 
     //Update listing
     public function update(Request $request, Listing $listing){
+
+        //Make sure logged in user is owner
+        if($listing->user_id !== (auth()->id())) {  
+            abort(403, 'Unauthorized action');
+        }
 
         $formFields = $request->validate([
             'title' => 'required',
@@ -97,8 +104,22 @@ class ListingController extends Controller
 
     //Delete listing:
     public function destroy(Listing $listing) {
+
+        //Make sure logged in user is owner
+        if($listing->user_id !== auth()->id()) {  
+            abort(403, 'Unauthorized action');
+        }
+
         $listing->delete();
         return redirect('/')->with('message', 'Listing deleted successfully.');
+    }
+
+    // Show manage listings
+
+    public function manage() {
+        //dd(auth()->user()->listings()->get());
+         return view('listings.manage', ['listings' => auth()->user()->listings()->get()]);
+         //user is accessed via Eloquent relationship defined in Listing model. "Undefined method" error may just be a vscode/intelephense bug.
     }
 
 }

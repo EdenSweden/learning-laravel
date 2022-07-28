@@ -144,8 +144,7 @@
                     name="description"
                     rows="10"
                     placeholder="Include tasks, requirements, salary, etc"
-                >
-                    {{old('description')}}
+                >{{old('description')}}
                 </textarea>
                 @error('description')
                 <p class="text-red-500 text-xs mt-1">{{$message}}</p>
