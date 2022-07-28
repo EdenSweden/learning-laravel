@@ -37,20 +37,21 @@ use App\Http\Controllers\ListingController;
     // (second arg here is a way to pass data into view page--in this case, the ListingController. Syntax is [ControllerName::class, method-to-use]):
 Route::get('/', [ListingController::class, 'index']);
 
-// SHOW CREATE FORM
-Route::get('/listings/create', [ListingController::class, 'create']);
+// SHOW CREATE LISTING FORM:
+//Middleware to make sure only guests (not logged-in users) can access this route:
+Route::get('/listings/create', [ListingController::class, 'create'])->middleware('auth');
 
 // STORE LISTING DATA:
-Route::post('/listings', [ListingController::class, 'store']);
+Route::post('/listings', [ListingController::class, 'store'])->middleware('auth');
 
 //SHOW EDIT FORM. Shows form to update:
-Route::get('/listings/{listing}/edit', [ListingController::class, 'edit']);
+Route::get('/listings/{listing}/edit', [ListingController::class, 'edit'])->middleware('auth');
 
 //UPDATE LISTING. Actually performs the update:
-Route::put('/listings/{listing}', [ListingController::class, 'update']);
+Route::put('/listings/{listing}', [ListingController::class, 'update'])->middleware('auth');
 
 //DELETE LISTING:
-Route::delete('/listings/{listing}', [ListingController::class, 'destroy']);
+Route::delete('/listings/{listing}', [ListingController::class, 'destroy'])->middleware('auth');
 
 // GET SINGLE LISTING:
 //This uses Eloquent model binding. Automatic 404 functionality if the id entered in the url doesn't actually exist as a page, etc. 
@@ -58,16 +59,18 @@ Route::delete('/listings/{listing}', [ListingController::class, 'destroy']);
 Route::get('/listings/{listing}', [ListingController::class, 'show']);
 
 //SHOW REGISTER/CREATE FORM:
-Route::get('/register', [UserController::class, 'create']);
+//middleware to make route only accessible to guests (not logged in users):
+Route::get('/register', [UserController::class, 'create'])->middleware('guest');
 
 //CREATE NEW USER:
 Route::post('/users', [UserController::class, 'store']);
 
 //LOG USER OUT:
-Route::post('/logout', [UserController::class, 'logout']);
+Route::post('/logout', [UserController::class, 'logout'])->middleware('auth');
 
 //SHOW LOGIN FORM:
-Route::get('/login', [UserController::class, 'login']);
+//note how you can chain the name and the middleware to a single route
+Route::get('/login', [UserController::class, 'login'])->name('login')->middleware('guest');
 
 //LOG IN USER:
 Route::post('/users/authenticate', [UserController::class, 'authenticate']);
